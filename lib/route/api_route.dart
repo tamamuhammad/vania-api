@@ -14,6 +14,7 @@ class ApiRoute implements Route {
   @override
   void register() {
     /// Base RoutePrefix
+    Router.basePrefix('api');
 
     Router.post('/customer', customersController.store);
     Router.get('/customer', customersController.show);
