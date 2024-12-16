@@ -1,10 +1,14 @@
 import 'package:vania/vania.dart';
+import 'package:vania_exam/app/http/controllers/auth_controller.dart';
 import 'package:vania_exam/app/http/controllers/customers_controller.dart';
 import 'package:vania_exam/app/http/controllers/orderitems_controller.dart';
 import 'package:vania_exam/app/http/controllers/orders_controller.dart';
 import 'package:vania_exam/app/http/controllers/productnotes_controller.dart';
 import 'package:vania_exam/app/http/controllers/products_controller.dart';
+import 'package:vania_exam/app/http/controllers/todos_controller.dart';
+import 'package:vania_exam/app/http/controllers/user_controller.dart';
 import 'package:vania_exam/app/http/controllers/vendors_controller.dart';
+import 'package:vania_exam/app/http/middleware/authenticate.dart';
 
 class ApiRoute implements Route {
   @override
@@ -40,5 +44,21 @@ class ApiRoute implements Route {
     Router.get('/productnote', productnotesController.show);
     Router.put('/productnote/{id}', productnotesController.update);
     Router.delete('/productnote/{id}', productnotesController.destroy);
+
+    Router.group(() {
+      Router.post('register', authController.register);
+      Router.post('login', authController.login);
+    }, prefix: 'auth');
+
+    Router.group(() {
+      Router.post('update-password', userController.updatePassword);
+      Router.post('', userController.index);
+    }, prefix: 'user', middleware: [AuthenticateMiddleware()]);
+
+    Router.get('me', authController.me).middleware([AuthenticateMiddleware()]);
+
+    Router.group(() {
+      Router.post('todo', todosController.store);
+    }, prefix: 'todo', middleware: [AuthenticateMiddleware()]);
   }
 }
