@@ -10,7 +10,7 @@ class CreateUserTable extends Migration {
       string('email', length: 190);
       string('password', length: 200);
       timeStamps();
-      dateTime('deleted_at', nullable: true);
+      timeStamp('deleted_at', nullable: true);
     });
   }
 
